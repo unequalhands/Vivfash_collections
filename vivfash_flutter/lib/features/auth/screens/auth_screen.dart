@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vivfash_flutter/common/widget/custom_button.dart';
 import 'package:vivfash_flutter/common/widget/custom_textfield.dart';
 import 'package:vivfash_flutter/constants/global_variables.dart';
+import 'package:vivfash_flutter/features/auth/services/auth_services.dart';
 
 enum Auth { signin, signup }
 
@@ -17,16 +18,29 @@ class _AuthScreenState extends State<AuthScreen> {
   Auth _auth = Auth.signup;
   final _signupFormKey = GlobalKey<FormState>();
   final _signInFormKey = GlobalKey<FormState>();
-  
+
+  final AuthServices authServices = AuthServices();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+
   @override
   void dispose() {
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-    _nameController.dispose();
+    _lastNameController.dispose();
+    _firstNameController.dispose();
+  }
+
+  void signUpSevices() {
+    authServices.signUpUser(
+        context: context,
+        email: _emailController.text,
+        lastName: _lastNameController.text,
+        firstName: _firstNameController.text,
+        password: _passwordController.text);
   }
 
   Widget build(BuildContext context) {
@@ -53,7 +67,9 @@ class _AuthScreenState extends State<AuthScreen> {
                   });
                 },
               ),
-              tileColor: _auth == Auth.signup?GlobalVariables.backgroundColor:GlobalVariables.greyBackgroundCOlor,
+              tileColor: _auth == Auth.signup
+                  ? GlobalVariables.backgroundColor
+                  : GlobalVariables.greyBackgroundCOlor,
               title: const Text(
                 "Create an Account",
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -67,20 +83,44 @@ class _AuthScreenState extends State<AuthScreen> {
                   key: _signupFormKey,
                   child: Column(
                     children: [
-                      CustomTextField(controller: _nameController, hintText: 'Nane'),
-                      SizedBox(height: 10,),
-                      CustomTextField(controller: _emailController, hintText: "email"),
-                      SizedBox(height: 10,),
-                      CustomTextField(controller: _passwordController, hintText: "password"),
-                      SizedBox(height: 10,),
-                      CustomButton(text: 'Sign-UP', onTap: (){})
-
+                      CustomTextField(
+                          controller: _firstNameController,
+                          hintText: 'FirstName'),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      CustomTextField(
+                          controller: _lastNameController,
+                          hintText: 'lastName'),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      CustomTextField(
+                          controller: _emailController, hintText: "email"),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      CustomTextField(
+                          controller: _passwordController,
+                          hintText: "password"),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      CustomButton(
+                          text: 'Sign-UP',
+                          onTap: () {
+                            if (_signupFormKey.currentState!.validate()) {
+                              signUpSevices();
+                            }
+                          })
                     ],
                   ),
                 ),
               ),
             ListTile(
-              tileColor: _auth == Auth.signin?GlobalVariables.backgroundColor:GlobalVariables.greyBackgroundCOlor,
+              tileColor: _auth == Auth.signin
+                  ? GlobalVariables.backgroundColor
+                  : GlobalVariables.greyBackgroundCOlor,
               leading: Radio(
                 activeColor: GlobalVariables.secondaryColor,
                 value: Auth.signin,
@@ -104,13 +144,18 @@ class _AuthScreenState extends State<AuthScreen> {
                   key: _signInFormKey,
                   child: Column(
                     children: [
-                    
-                      CustomTextField(controller: _emailController, hintText: "email"),
-                      SizedBox(height: 10,),
-                      CustomTextField(controller: _passwordController, hintText: "password"),
-                      SizedBox(height: 10,),
-                      CustomButton(text: 'Sign-in', onTap: (){})
-
+                      CustomTextField(
+                          controller: _emailController, hintText: "email"),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      CustomTextField(
+                          controller: _passwordController,
+                          hintText: "password"),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      CustomButton(text: 'Sign-in', onTap: () {})
                     ],
                   ),
                 ),

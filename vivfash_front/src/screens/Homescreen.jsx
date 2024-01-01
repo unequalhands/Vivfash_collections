@@ -1,24 +1,22 @@
-import data from "./data.js";
+import React from 'react'
+import data from '../data'
+import { Link } from 'react-router-dom'
 
-function App() {
+const Homescreen = () => {
   return (
     <div>
-      <header>
-        <a href="/">VIVFASH-COLLECTIONS</a>
-      </header>
-      <main>
-       <h1>Customized cloth designs</h1>
+      <h1>Customized cloth designs</h1>
        <div className="products">
        {
         data.products.map(product => (
           <div className="product" key={product.slug}>
-            <a href ={`/product/${product.slug}`}>
+            <Link to ={`/product/${product.slug}`}>
             <img src={product.images} alt={product.name} />
-            </a>
+            </Link>
             <div className="product-info">
-             <a href={`/product/${product.slug}`}>
+             <Link to={`/product/${product.slug}`}>
                <p>{product.name}</p>
-               </a>
+               </Link>
               <p><strong>${product.price}</strong></p>
               <button>Add to Cart</button>
             </div>
@@ -26,9 +24,8 @@ function App() {
         ))
           }
           </div>
-      </main>
     </div>
-  );
+  )
 }
 
-export default App;
+export default Homescreen
